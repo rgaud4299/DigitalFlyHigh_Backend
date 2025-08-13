@@ -27,7 +27,7 @@ connectDB();
 console.log('hello'); // app.use('/api', quoteRoute);
 
 app.post('/quote', function _callee(req, res) {
-  var _req$body, name, businessName, email, phone, website, social, message, quote, mailOptions;
+  var _req$body, name, businessName, email, phone, website, social, message, quote, mailUser, mailHR;
 
   return regeneratorRuntime.async(function _callee$(_context) {
     while (1) {
@@ -49,34 +49,44 @@ app.post('/quote', function _callee(req, res) {
           return regeneratorRuntime.awrap(quote.save());
 
         case 6:
-          console.log('Quotion Save to DB');
-          mailOptions = {
-            from: 'rgaud4299@gmail.com',
-            to: 'rgaud206@gmail.com',
-            subject: 'digitalflyhigh',
-            text: "Thank you for your quote request',\n          Hi ".concat(name, " received your request. Our team will contact you soon.")
+          console.log('Quotion Save to DB'); // console.log(process.env.EMAIL_company,process.env.MAIL_PASS);
+
+          mailUser = {
+            from: process.env.EMAIL_company,
+            to: email,
+            subject: 'Digital Fly High - Quote Request',
+            text: "Thank you for your quote request.\nHi ".concat(name, ", we have received your request. Our team will contact you soon.")
+          }; // Email to HR
+
+          mailHR = {
+            from: process.env.EMAIL_company,
+            to: process.env.HR_EMAIL,
+            // HR email from .env
+            subject: 'New Quote Request - Digital Fly High',
+            text: "New quote request received.\n\nName: ".concat(name, "\nBusiness Name: ").concat(businessName, "\nEmail: ").concat(email, "\nPhone: ").concat(phone, "\nWebsite: ").concat(website, "\nSocial: ").concat(social, "\nMessage: ").concat(message)
           };
-          sendMail(mailOptions);
+          sendMail(mailUser);
+          sendMail(mailHR);
           res.status(201).json({
             message: 'Quote submitted and emails sent.'
           });
-          _context.next = 15;
+          _context.next = 17;
           break;
 
-        case 12:
-          _context.prev = 12;
+        case 14:
+          _context.prev = 14;
           _context.t0 = _context["catch"](0);
           res.status(500).json({
             error: 'Something went wrong to backend.',
             err: _context.t0
           });
 
-        case 15:
+        case 17:
         case "end":
           return _context.stop();
       }
     }
-  }, null, null, [[0, 12]]);
+  }, null, null, [[0, 14]]);
 });
 var PORT = process.env.PORT || 6000;
 app.listen(PORT, function () {
