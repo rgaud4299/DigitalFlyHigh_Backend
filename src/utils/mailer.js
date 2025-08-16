@@ -6,7 +6,7 @@ require('dotenv').config();
 
 
 const transporter = nodemailer.createTransport({
-  service: "gmail", // Gmail Service Use करें
+  service: "gmail", 
   secure: true, 
   auth: {
     
